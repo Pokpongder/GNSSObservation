@@ -19,20 +19,19 @@ fetch(thaiProvincesUrl)
             style: function(feature) {
                 return {
                     color: '#434c55ff',
-                    weight: 1,
+                    weight: 0.2,
                     fillOpacity: 0.1
                 };
             },
-            onEachFeature: function(feature, layer) {
-                layer.bindTooltip(feature.properties.name);
-            }
         }).addTo(map);
     });
 
 // 3. ข้อมูลสถานี
 var stations = [
     { name: "Chulalongkorn", code: "CUSV", lat: 13.7367, lon: 100.5331 },
-    { name: "Chiang Mai", code: "CMU1", lat: 18.8000, lon: 98.9500 }
+    { name: "CM01", code: "CMU1", lat: 18.8000, lon: 98.9500 },
+    { name: "CADT", code:"CADT", lat: 11.6545, lon: 104.9116},
+    { name: "KMIT", code:"KMIT", lat: 13.7278, lon: 100.7724 }
 ];
 
 stations.forEach(function(s) {
