@@ -3,15 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GNSS Stations Map</title>
-
+    <title>Thailand GNSS Map</title>
+    
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
-    <style>
-        /* ตั้งค่าความสูงของแผนที่ให้เต็มจอ */
-        body { margin: 0; padding: 0; }
-        #map { height: 100vh; width: 100%; }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -19,40 +15,6 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    <script>
-        // --- ส่วนการตั้งค่าแผนที่ ---
-
-        // 4. สร้างแผนที่ (กำหนดพิกัดเริ่มต้นที่ กลางประเทศไทย และ Zoom Level 6)
-        var map = L.map('map').setView([13.0, 101.5], 6);
-
-        // 5. ดึงภาพแผนที่จาก OpenStreetMap มาแปะ
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
-
-        // --- ส่วนข้อมูลสถานี (สมมติว่าเป็น Mockup Data) ---
-        // ในอนาคตส่วนนี้จะถูกดึงมาจาก Database ผ่าน Python API
-        var stations = [
-            { name: "Chulalongkorn", code: "CUSV", lat: 13.7367, lon: 100.5331, file: "cusv2024.zip" },
-            { name: "Chiang Mai", code: "CMU1", lat: 18.8000, lon: 98.9500, file: "cmu12024.zip" },
-            { name: "Phuket", code: "PKT1", lat: 7.8804, lon: 98.3923, file: "pkt12024.zip" },
-            { name: "KMITL", code: "KMI6", lat: 13.7278, lon: 100.7724, file: "KMI62025.zip" }
-        ];
-
-        // 6. วนลูปสร้างจุด (Marker) ลงบนแผนที่
-        stations.forEach(function(station) {
-            var marker = L.marker([station.lat, station.lon]).addTo(map);
-            
-            // ใส่ Popup (กล่องข้อมูลเมื่อคลิก)
-            marker.bindPopup(`
-                <b>Station: ${station.name} (${station.code})</b><br>
-                Lat: ${station.lat}, Lon: ${station.lon}<br>
-                <hr>
-                <a href="http://localhost/files/${station.file}" target="_blank">Download RINEX File</a>
-            `);
-        });
-
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
