@@ -8,6 +8,10 @@
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -30,6 +34,11 @@
     </nav>
 
     <div id="map"></div>
+
+    <!-- Reset Button -->
+    <button id="reset-btn" class="map-control-btn" title="Reset Map View">
+        <img src="https://www.svgrepo.com/show/491703/back-circle.svg" alt="Reset" style="width: 20px; height: 20px;">
+    </button>
 
     <div id="sidebar" class="sidebar">
         <button id="close-sidebar" class="close-btn">&times;</button>

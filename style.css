@@ -17,7 +17,7 @@
     /* Ensure it stays above map */
     box-sizing: border-box;
     /* Text shadow for better visibility on map */
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    text-shadow: none;
 }
 
 .nav-brand {
@@ -43,7 +43,7 @@
     margin-left: 20px;
     cursor: pointer;
     font-family: inherit;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    text-shadow: none;
 }
 
 .nav-links a:hover,
@@ -58,17 +58,30 @@
 }
 
 .dropdown-content {
-    display: none;
+    display: block;
+    /* Make block so we can animate properties */
     position: absolute;
     right: 0;
     background-color: #f9f9f9;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1001;
-    max-height: 300px;
-    overflow-y: auto;
     text-shadow: none;
-    /* Reset text shadow for dropdown */
+
+    /* Animation Styles */
+    max-height: 0;
+    opacity: 0;
+    visibility: hidden;
+    overflow: hidden;
+    transition: max-height 0.4s ease-in-out, opacity 0.4s ease-in-out, visibility 0.4s;
+}
+
+.dropdown-content.show {
+    max-height: 300px;
+    /* Match original max-height */
+    opacity: 1;
+    visibility: visible;
+    overflow-y: auto;
 }
 
 .dropdown-content a {
@@ -87,6 +100,13 @@
 
 
 
+/* .show class is now handled specifically in .dropdown-content.show for the animation, 
+   but we keep this if used elsewhere, though typically we should avoid general utilities if we want specific animations.
+   For this case, since JS toggles 'show', our specific selector .dropdown-content.show will take precedence 
+   due to specificity or we ensure it does consistent things. 
+   Actually, the previous rule was display: block !important. 
+   We don't strictly need it for the dropdown anymore since it's already display: block. 
+   We can leave it or remove it if unused elsewhere. */
 .show {
     display: block !important;
 }
@@ -107,7 +127,7 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
     /* Add a font */
 }
 
@@ -173,7 +193,6 @@ body {
 
 .sidebar.open {
     width: 30%;
-    /* Requested 30% width */
 }
 
 /* Ensure sidebar takes decent width on mobile */
@@ -200,4 +219,39 @@ body {
 
 .close-btn:hover {
     color: #000;
+}
+
+/* Map Control Buttons (Reset) */
+.map-control-btn {
+    position: fixed;
+    bottom: 30px;
+    left: 20px;
+    /* Moved to bottom-left */
+    z-index: 1000;
+    /* Above map */
+    background-color: white;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    /* Match Leaflet style usually square-ish */
+    padding: 5px;
+    cursor: pointer;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    transition: background-color 0.2s;
+}
+
+.map-control-btn:hover {
+    background-color: #f4f4f4;
+}
+/* Station Coordinates in Sidebar */
+.station-coords {
+    font-size: 0.9em;
+    color: #555;
+    margin-top: -10px;
+    margin-bottom: 15px;
+    font-weight: normal;
 }

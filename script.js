@@ -10,6 +10,14 @@ var map = L.map('map', {
     zoomControl: false       // Disable default zoom control
 }).setView([13.0, 101.5], 6);
 
+
+// Reset Button Logic
+document.getElementById('reset-btn').onclick = function () {
+    map.setView([13.0, 101.5], 6);
+    // Also close sidebar if open? Maybe good UX
+    closeSidebar();
+};
+
 L.control.zoom({
     position: 'bottomright'
 }).addTo(map);
@@ -33,7 +41,9 @@ var stations = [
     { name: "NUO2", code: "NUO2", lat: 17.9383, lon: 102.6261 },
     { name: "AER1", code: "AER1", lat: 13.6945, lon: 100.7608 },
     { name: "ITC0", code: "ITC0", lat: 11.5705, lon: 104.8994 },
-    { name: "HUE0", code: "HUE0", lat: 16.4155, lon: 107.5687 }
+    { name: "HUE0", code: "HUE0", lat: 16.4155, lon: 107.5687 },
+    { name: "KKU0", code: "KKU0", lat: 16.4721, lon: 102.8260 }
+
 ];
 
 var customIcon = L.icon({
@@ -51,6 +61,7 @@ var sidebarContent = document.getElementById('sidebar-content');
 function openSidebar(s) {
     sidebarContent.innerHTML = `
         <h3>${s.name} (${s.code})</h3>
+        <p class="station-coords">Lat: ${s.lat.toFixed(4)}, Lon: ${s.lon.toFixed(4)}</p>
         <ul class="station-data-list">
             <li><a href="#">1. Heliosphere</a></li>
             <li><a href="#">2. Geospace</a></li>
