@@ -66,7 +66,7 @@ function openSidebar(s) {
                 <a href="#" onclick="toggleIonosphere(event)">1. Ionosphere &#9662;</a>
                 <div id="ionosphere-content" class="accordion-content">
                     <br>
-                     <img src="http://localhost:8000/ionospherebystation/${s.name}/latest.jpg" alt="${s.name} View" class="station-image" onclick="openLightbox(this.src)" onerror="this.parentElement.style.display='none'">
+                     <img src="http://localhost:8000/ionospherebystation/${s.name}/latest.jpg" alt="${s.name} View" class="station-image" title="Click for Full image" onclick="openLightbox(this.src)" onerror="this.parentElement.style.display='none'">
                 </div>
             </li>
         </ul>
@@ -74,62 +74,65 @@ function openSidebar(s) {
     sidebar.classList.add('open');
     checkStationStatus(s.name, s.code);
 }
-
 function checkStationStatus(stationName, stationCode) {
-    var dot = document.getElementById('status-dot-' + stationCode);
-    if (!dot) return;
+    // 1. แก้ไข: ดึง Element แยกกัน 2 ตัว (ใน Sidebar และ Navbar)
+    var dotSidebar = document.getElementById('status-dot-' + stationCode);
+    var dotNav = document.getElementById('status-dot-nav-' + stationCode);
 
-    // Reset classes to avoid accumulation
-    dot.classList.remove('status-red', 'status-green', 'status-orange');
+    // ถ้าไม่มีจุดสักอันเลย ก็ไม่ต้องทำต่อ
+    if (!dotSidebar && !dotNav) return;
 
-    // ใช้ IP แทน localhost ถ้าจะเปิดจากเครื่องอื่น หรือใช้ Relative Path ถ้าอยู่บน Server เดียวกัน
-    // กรณีนี้ไฟล์ static อยู่ที่ /ionospherebystation/STATION/latest.jpg
-    // ถ้าใช้ Live Server (port 5500) ก็จะเป็น http://127.0.0.1:5500/ionospherebystation/...
-    // ถ้าใช้ uvicorn (port 8000) ก็จะเป็น http://localhost:8000/ionospherebystation/...
-    // เพื่อความยืดหยุ่น ลองใช้ URL เต็มไปยัง Port 8000 (เพราะเรา mount static ไว้) หรือ Relative ถ้าไฟล์อยู่ที่เดียวกัน
-    // ผู้ใช้บอกว่า "เช็คจากไฟล์ในเครื่อง" -> สมมติว่า frontend/backend รันคู่กัน
+    // ฟังก์ชันย่อยสำหรับเปลี่ยนสี (จะได้ไม่ต้องพิมพ์ซ้ำๆ)
+    function updateStatus(colorClass) {
+        [dotSidebar, dotNav].forEach(dot => {
+            if (dot) {
+                dot.classList.remove('status-red', 'status-green', 'status-orange');
+                dot.classList.add(colorClass);
+            }
+        });
+    }
 
-    // ลองใช้ URL ของ Backend (Port 8000) เพื่อความแน่นอนเรื่องการอ่านไฟล์ที่ Python สร้าง
+    // 2. ใช้ IP Address แทน localhost (ตามที่เราคุยกันไว้)
+    // เพื่อให้เปิดจากมือถือหรือเครื่องอื่นได้
     var url = `http://localhost:8000/ionospherebystation/${stationName}/latest.jpg`;
-    // หรือถ้าอยากลองใช้ Relative Path (กรณี Deploy จริง):
-    // var url = `ionospherebystation/${stationName}/latest.jpg`;
 
     console.log(`Checking status for ${stationName} at ${url}...`);
 
-    fetch(url, { method: 'GET', cache: 'no-store' }) // Add no-store to prevent caching old image
+    // 3. แนะนำให้ใช้ method: 'HEAD' เหมือนเดิม เพื่อความเร็ว (ไม่โหลดรูปจริง)
+    // แต่ถ้าอยากใช้ GET ก็ไม่ผิดครับ แค่เปลืองเน็ตกว่านิดหน่อย
+    fetch(url, { method: 'HEAD', cache: 'no-store' }) 
         .then(response => {
-            // 1. กรณีหาไฟล์ไม่เจอ (404 Not Found)
+            // กรณีหาไฟล์ไม่เจอ (404)
             if (!response.ok) {
                 console.warn(`${stationName}: Response not OK (${response.status})`);
-                dot.classList.add('status-red'); // 🔴 แดง: ไม่มีไฟล์
+                updateStatus('status-red'); // 🔴
                 return;
             }
 
-            // 2. กรณีเจอไฟล์ (200 OK) 
+            // กรณีเจอไฟล์ (200 OK)
             var lastModified = response.headers.get('Last-Modified');
-            console.log(`${stationName}: Last-Modified header = ${lastModified}`);
-
+            
             if (lastModified) {
                 var fileDate = new Date(lastModified);
                 var now = new Date();
 
-                // เปรียบเทียบแค่วัน/เดือน/ปี (ตัดเวลาทิ้ง)
+                // เปรียบเทียบแค่วัน/เดือน/ปี
                 if (fileDate.toDateString() === now.toDateString()) {
                     console.log(`${stationName}: Status GREEN (Updated today)`);
-                    dot.classList.add('status-green'); // 🟢 เขียว: ปกติ (มาวันนี้)
+                    updateStatus('status-green'); // 🟢
                 } else {
-                    console.log(`${stationName}: Status ORANGE (Old data: ${fileDate.toDateString()})`);
-                    dot.classList.add('status-orange'); // 🟠 ส้ม: ข้อมูลเก่า (ไม่อัปเดต)
+                    console.log(`${stationName}: Status ORANGE (Old data)`);
+                    updateStatus('status-orange'); // 🟠
                 }
             } else {
-                console.log(`${stationName}: Status GREEN (No Last-Modified header found, assuming OK)`);
-                dot.classList.add('status-green');
+                // ถ้าไม่มี Header วันที่มาด้วย ให้เป็นเขียวไปก่อน (Safe fail)
+                updateStatus('status-green'); // 🟢
             }
         })
         .catch(error => {
-            // 3. กรณีเน็ตหลุด หรือ Server ดับ
+            // กรณีเน็ตหลุด หรือ Server ดับ
             console.error(`${stationName}: Network Error:`, error);
-            dot.classList.add('status-red'); //  แดง: เชื่อมต่อไม่ได้
+            updateStatus('status-red'); // 🔴
         });
 }
 
@@ -172,7 +175,8 @@ var stationsList = document.getElementById('stations-list');
 stations.forEach(function (s) {
     var link = document.createElement('a');
     link.href = "#";
-    link.textContent = s.name + " (" + s.code + ")";
+    // Add Dot Span with unique ID for Navbar
+    link.innerHTML = `${s.name} (${s.code}) <span id="status-dot-nav-${s.code}" class="status-dot"></span>`;
     link.onclick = function (e) {
         e.preventDefault(); // ป้องกันการดีดขึ้นบนสุดของหน้า
 
@@ -184,6 +188,11 @@ stations.forEach(function (s) {
         stationsList.classList.remove('show');
     };
     stationsList.appendChild(link);
+});
+
+// Initialize Status Checks for ALL stations immediately
+stations.forEach(function (s) {
+    checkStationStatus(s.name, s.code);
 });
 
 // Toggle การแสดงผล Dropdown

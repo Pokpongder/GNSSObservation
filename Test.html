@@ -37,7 +37,7 @@
 
     <!-- Reset Button -->
     <button id="reset-btn" class="map-control-btn" title="Reset Map View">
-        <img src="https://www.svgrepo.com/show/491703/back-circle.svg" alt="Reset" style="width: 20px; height: 20px;">
+        <img src="image/button-svgrepo-com.svg" alt="Reset" style="width: 30px; height: 30px;">
     </button>
 
     <div id="sidebar" class="sidebar">
@@ -47,10 +47,47 @@
         </div>
     </div>
 
-    <!-- Lightbox Modal -->
     <div id="lightbox" class="lightbox">
         <span class="close-lightbox">&times;</span>
-        <img class="lightbox-content" id="lightbox-img">
+        <div class="lightbox-container">
+            <img class="lightbox-content" id="lightbox-img">
+
+            <!-- Added Information Section -->
+            <div id="lightbox-info">
+                <div class="info-item">
+                    <h3>1. TEC (Total Electron Content)</h3>
+                    <ul>
+                        <li><strong>หน่วย:</strong> TECU (1 TECU = 10<sup>16</sup> electrons/m<sup>2</sup>)</li>
+                        <li><strong>คืออะไร:</strong>
+                            ปริมาณอิเล็กตรอนรวมทั้งหมดในเส้นทางที่สัญญาณวิทยุวิ่งผ่านจากดาวเทียมมาถึงเครื่องรับ</li>
+                        <li><strong>ความสำคัญ:</strong> ยิ่งค่า TEC สูง สัญญาณยิ่งถูกหน่วงเวลา (Delay) มาก
+                            ทำให้ระยะทางผิดเพี้ยน</li>
+                    </ul>
+                </div>
+
+                <div class="info-item">
+                    <h3>2. ROTI (Rate of TEC Index)</h3>
+                    <ul>
+                        <li><strong>หน่วย:</strong> TECU/min</li>
+                        <li><strong>คืออะไร:</strong> ค่าความแปรปรวนของ TEC เทียบกับเวลา (วัดความ "แกว่ง" ของ TEC)</li>
+                        <li><strong>ความสำคัญ:</strong> ใช้ตรวจจับความปั่นป่วนในชั้นบรรยากาศ (Ionospheric
+                            Irregularities) เช่น ฟองอากาศพลาสมา (Plasma Bubble) ถ้า ROTI พุ่งสูง (เช่น > 0.5)
+                            แสดงว่าสัญญาณกำลังถูกรบกวนอย่างหนัก (Scintillation)</li>
+                    </ul>
+                </div>
+
+                <div class="info-item">
+                    <h3>3. Number of satellites</h3>
+                    <ul>
+                        <li><strong>คืออะไร:</strong> จำนวนดาวเทียมที่เครื่องรับมองเห็นและสามารถนำมาใช้คำนวณตำแหน่งได้ ณ
+                            เวลานั้น</li>
+                        <li><strong>ความสำคัญ:</strong> ต้องมีอย่างน้อย 4 ดวงจึงจะระบุตำแหน่งได้ ยิ่งมีจำนวนมาก
+                            ค่าความแม่นยำทางเรขาคณิต (DOP) ยิ่งดี หากจำนวนลดลงกะทันหันมักเกิดจากสัญญาณหลุด (Loss of
+                            Lock) เนื่องจากพายุไอโอโนสเฟียร์</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
         <div id="caption"></div>
     </div>
 

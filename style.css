@@ -12,7 +12,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 1000;
+    z-index: 1100;
     /* Ensure it stays above map */
     box-sizing: border-box;
     /* Text shadow for better visibility on map */
@@ -60,11 +60,13 @@
     display: block;
     /* Make block so we can animate properties */
     position: absolute;
-    right: 0;
+    top: 36px;
+    left: 0;
+    right: auto;
     background-color: #f9f9f9;
-    min-width: 160px;
+    min-width: 180px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-    z-index: 1001;
+    z-index: 1003;
     text-shadow: none;
 
     /* Animation Styles */
@@ -87,7 +89,10 @@
     color: black;
     padding: 12px 16px;
     text-decoration: none;
-    display: block;
+    display: flex;
+    /* Use flex to align text and dot */
+    justify-content: space-between;
+    align-items: center;
     margin: 0;
     text-align: left;
 }
@@ -228,18 +233,17 @@ body {
     /* Moved to bottom-left */
     z-index: 1000;
     /* Above map */
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.8);
     border: 2px solid rgba(0, 0, 0, 0.2);
-    border-radius: 4px;
+    border-radius: 50%;
     /* Match Leaflet style usually square-ish */
     padding: 5px;
     cursor: pointer;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 34px;
-    height: 34px;
+    width: 30px;
+    height: 30px;
     transition: background-color 0.2s;
 }
 
@@ -289,11 +293,10 @@ body {
 .lightbox {
     display: none;
     /* Hidden by default */
-    position: fixed;
-    /* Stay in place */
+    position: absolute;
     z-index: 2000;
     /* Sit on top of everything (sidebar is 1002) */
-    padding-top: 60px;
+    padding-top: 0;
     /* Location of the box */
     left: 0;
     top: 0;
@@ -309,16 +312,74 @@ body {
     /* Black w/ opacity */
 }
 
+/* Lightbox Flex Container */
+.lightbox-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 90%;
+    height: 90%;
+    margin: 60px auto auto auto;
+    /* Add margin-top for navbar/close btn */
+    max-width: 1400px;
+}
+
 .lightbox-content {
-    margin: auto;
+    margin: 0;
+    /* Remove auto margin */
     display: block;
-    width: 80%;
-    max-width: 900px;
-    max-height: 80vh;
-    /* Don't exceed screen height too much */
+    width: auto;
+    max-width: 65%;
+    /* Take up about 2/3 */
+    max-height: 85vh;
     object-fit: contain;
     animation-name: zoom;
     animation-duration: 0.6s;
+    background-color: #000;
+    /* Backdrop for image if different aspect ratio */
+}
+
+/* Lightbox Info Section */
+#lightbox-info {
+    flex: 1;
+    /* Take remaining space */
+    max-width: 35%;
+    margin-left: 20px;
+    margin-top: 30px;
+    color: #e0e0e0;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 15px;
+    /* Reduced padding */
+    border-radius: 8px;
+    font-family: 'Roboto', sans-serif;
+    text-align: left;
+    font-size: 0.85rem;
+    /* Smaller font */
+    max-height: 80vh;
+    overflow-y: auto;
+    /* Scroll if content is too long */
+}
+
+.info-item {
+    margin-bottom: 15px;
+}
+
+.info-item h3 {
+    margin-top: 0;
+    color: #fff;
+    border-bottom: 1px solid #555;
+    padding-bottom: 5px;
+    font-size: 1rem;
+}
+
+.info-item ul {
+    list-style-type: disc;
+    padding-left: 15px;
+}
+
+.info-item li {
+    margin-bottom: 5px;
+    line-height: 1.4;
 }
 
 @keyframes zoom {
@@ -340,6 +401,8 @@ body {
     font-weight: bold;
     transition: 0.3s;
     cursor: pointer;
+    z-index: 2005;
+    /* Ensure above container */
 }
 
 .close-lightbox:hover,
@@ -349,10 +412,31 @@ body {
     cursor: pointer;
 }
 
-/* 100% Image Width on Smaller Screens */
-@media only screen and (max-width: 700px) {
+/* Responsive: Stack on smaller screens */
+@media only screen and (max-width: 900px) {
+    .lightbox-container {
+        flex-direction: column;
+        align-items: center;
+        margin-top: 60px;
+        height: auto;
+        overflow-y: auto;
+        /* Allow full page scroll if needed on mobile */
+        padding-bottom: 50px;
+    }
+
     .lightbox-content {
+        max-width: 100%;
         width: 100%;
+        margin-bottom: 20px;
+    }
+
+    #lightbox-info {
+        max-width: 100%;
+        width: 90%;
+        margin-left: 0;
+        font-size: 0.9rem;
+        max-height: none;
+        /* Let it grow */
     }
 }
 

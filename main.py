@@ -87,7 +87,7 @@ async def sync_images_from_nas():
         except Exception as e:
             print(f"Global Sync Error: {e}")
             
-        await asyncio.sleep(1800) # Run every 1800 seconds
+        await asyncio.sleep(1800) # Run every 60 seconds
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
