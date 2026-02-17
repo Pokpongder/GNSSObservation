@@ -18,7 +18,6 @@ NTRIP_USER = "pokpong"
 NTRIP_PASSWORD = "pokpong2546"
 NTRIP_TIMEOUT = 5  # วินาที
 
-# รายชื่อ mountpoints ทั้งหมด (ต้องตรงกับ station code ใน script.js)
 ALL_MOUNTPOINTS = ["CHMA", "CADT", "KMI6", "STFD", "RUTI", "CPN1", "NUO2", "ITC0", "HUEV", "KKU0"]
 
 

@@ -45,12 +45,27 @@ var stations = [
 
 ];
 
-var customIcon = L.icon({
-    iconUrl: 'image/gnss-antenna-svgrepo-com (1).svg',
-    iconSize: [32, 32],
-    iconAnchor: [16, 32],
-    popupAnchor: [0, -32]
-});
+// สร้าง divIcon วงกลมสี ตาม status (gray = loading, green = online, red = offline)
+function createStatusIcon(color) {
+    return L.divIcon({
+        className: 'marker-status-dot',
+        html: `<div style="
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: ${color};
+            border: 1px solid white;
+            box-shadow: 0 0 6px rgba(0,0,0,0.35);
+        "></div>`,
+        iconSize: [18, 18],
+        iconAnchor: [9, 9],
+        popupAnchor: [0, -12]
+    });
+}
+
+var iconGray = createStatusIcon('#aaa');
+var iconGreen = createStatusIcon('#2ecc71');
+var iconRed = createStatusIcon('#e74c3c');
 
 // 4. Sidebar Logic
 var sidebar = document.getElementById('sidebar');
@@ -79,19 +94,24 @@ function checkStationStatus(stationName, stationCode) {
     var dotSidebar = document.getElementById('status-dot-' + stationCode);
     var dotNav = document.getElementById('status-dot-nav-' + stationCode);
 
-    if (!dotSidebar && !dotNav) return;
+    // หา station object เพื่ออัปเดต marker icon บนแผนที่
+    var station = stations.find(s => s.code === stationCode);
 
-    // ฟังก์ชันย่อยสำหรับเปลี่ยนสี
-    function updateStatus(colorClass) {
+    // ฟังก์ชันย่อยสำหรับเปลี่ยนสี dot + marker icon
+    function updateStatus(colorClass, markerIcon) {
         [dotSidebar, dotNav].forEach(dot => {
             if (dot) {
                 dot.classList.remove('status-red', 'status-green', 'status-orange');
                 dot.classList.add(colorClass);
             }
         });
+        // อัปเดต marker icon บนแผนที่ด้วย
+        if (station && station.marker) {
+            station.marker.setIcon(markerIcon);
+        }
     }
 
-    // 2. เช็คสถานะจาก NTRIP endpoint แทนการดึงไฟล์จาก NAS
+    // 2. เช็คสถานะจาก NTRIP endpoint
     var url = `http://localhost:8000/ntrip-status/${stationName}`;
 
     console.log(`Checking NTRIP status for ${stationName}...`);
@@ -100,7 +120,7 @@ function checkStationStatus(stationName, stationCode) {
         .then(response => {
             if (!response.ok) {
                 console.warn(`${stationName}: API response not OK (${response.status})`);
-                updateStatus('status-red'); // 🔴
+                updateStatus('status-red', iconRed); // 🔴
                 return;
             }
             return response.json();
@@ -110,15 +130,15 @@ function checkStationStatus(stationName, stationCode) {
 
             if (data.status === 'green') {
                 console.log(`${stationName}: NTRIP Status GREEN (RTCM data available)`);
-                updateStatus('status-green'); // 🟢
+                updateStatus('status-green', iconGreen); // 🟢
             } else {
                 console.log(`${stationName}: NTRIP Status RED (No RTCM data)`);
-                updateStatus('status-red'); // 🔴
+                updateStatus('status-red', iconRed); // 🔴
             }
         })
         .catch(error => {
             console.error(`${stationName}: Network Error:`, error);
-            updateStatus('status-red'); // 🔴
+            updateStatus('status-red', iconRed); // 🔴
         });
 }
 
@@ -141,16 +161,15 @@ closeSidebarBtn.onclick = closeSidebar;
 
 
 stations.forEach(function (s) {
-    // Remove bindPopup and use click event
-    var marker = L.marker([s.lat, s.lon], { icon: customIcon }).addTo(map)
+    // ใช้ iconGray (สีเทา) เป็นค่าเริ่มต้น รอ checkStationStatus อัปเดตเป็นเขียว/แดง
+    var marker = L.marker([s.lat, s.lon], { icon: iconGray }).addTo(map)
         .bindTooltip(`<b>${s.name} (${s.code})</b>`)
         .on('click', function () {
             openSidebar(s);
-            // Center map on marker if desired, but maybe keep it simple for now
             map.setView([s.lat, s.lon], 10);
         });
 
-    s.marker = marker; // เก็บ marker ไว้ใน object เพื่อเรียกใช้ภายหลัง
+    s.marker = marker;
 });
 
 // 5. จัดการ Navbar และ Station List
@@ -213,9 +232,6 @@ if (closeLightboxBtn) {
 
 // Close when clicking outside the image
 
-
-// Better way: use addEventListener for the previous window click too, or just append logic here.
-// Let's rewrite the window click handler to handle both.
 document.addEventListener('click', function (event) {
     // Handle Dropdown close
     if (!event.target.matches('#stations-btn')) {
