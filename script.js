@@ -50,8 +50,8 @@ function createStatusIcon(color) {
     return L.divIcon({
         className: 'marker-status-dot',
         html: `<div style="
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
             border-radius: 50%;
             background: ${color};
             border: 1px solid white;
@@ -105,9 +105,10 @@ function checkStationStatus(stationName, stationCode) {
                 dot.classList.add(colorClass);
             }
         });
-        // อัปเดต marker icon บนแผนที่ด้วย
+        // อัปเดต marker icon บนแผนที่ด้วย + ให้สีเขียวอยู่บนสีแดง
         if (station && station.marker) {
             station.marker.setIcon(markerIcon);
+            station.marker.setZIndexOffset(colorClass === 'status-green' ? 1000 : 0);
         }
     }
 
