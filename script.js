@@ -32,19 +32,34 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
 
 // 3. ข้อมูลสถานี
 var stations = [
+    // --- Original Stations ---
     { name: "CHMA", code: "CHMA", lat: 18.8000, lon: 98.9500 },
     { name: "CADT", code: "CADT", lat: 11.6545, lon: 104.9116 },
     { name: "KMI6", code: "KMI6", lat: 13.7278, lon: 100.7724 },
     { name: "STFD", code: "STFD", lat: 13.7356, lon: 100.6611 },
-    { name: "RUTI", code: "RUTI", lat: 14.9889, lon: 102.1206 },
+    { name: "RUT1", code: "RUT1", lat: 14.9889, lon: 102.1206 },
     { name: "CPN1", code: "CPN1", lat: 10.7247, lon: 99.3744 },
     { name: "NUO2", code: "NUO2", lat: 17.9383, lon: 102.6261 },
     { name: "ITC0", code: "ITC0", lat: 11.5705, lon: 104.8994 },
     { name: "HUEV", code: "HUEV", lat: 16.4155, lon: 107.5687 },
-    { name: "KKU0", code: "KKU0", lat: 16.4721, lon: 102.8260 }
+    { name: "KKU0", code: "KKU0", lat: 16.4721, lon: 102.8260 },
 
+    // --- DPT Stations ---
+    { name: "NKSW", code: "NKSW", lat: 15.690637, lon: 100.114112 },
+    { name: "UTTD", code: "UTTD", lat: 17.630094, lon: 100.096343 },
+    { name: "CHAN", code: "CHAN", lat: 12.610310, lon: 102.102411 },
+    { name: "SPBR", code: "SPBR", lat: 14.518875, lon: 100.130580 },
+    { name: "DPT9", code: "DPT9", lat: 13.756782, lon: 100.573200 },
+    { name: "PJRK", code: "PJRK", lat: 11.811621, lon: 99.796348 },
+    { name: "SRTN", code: "SRTN", lat: 9.132225, lon: 99.331361 },
+    { name: "NKNY", code: "NKNY", lat: 14.212003, lon: 101.202211 },
+    { name: "SOKA", code: "SOKA", lat: 7.206694, lon: 100.596121 },
+    { name: "UDON", code: "UDON", lat: 17.412732, lon: 102.780704 },
+    { name: "CNBR", code: "CNBR", lat: 13.406019, lon: 100.997652 },
+    { name: "NKRM", code: "NKRM", lat: 14.992119, lon: 102.129470 },
+    { name: "LPBR", code: "LPBR", lat: 14.800907, lon: 100.651246 },
+    { name: "SISK", code: "SISK", lat: 15.116122, lon: 104.285676 }
 ];
-
 // สร้าง divIcon วงกลมสี ตาม status (gray = loading, green = online, red = offline)
 function createStatusIcon(color) {
     return L.divIcon({

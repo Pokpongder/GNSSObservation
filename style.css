@@ -84,6 +84,14 @@
     visibility: visible;
     overflow-y: auto;
 }
+.leaflet-grab {
+    cursor: grab !important;
+    color: darkcyan !important;
+}
+.leaflet-dragging .leaflet-grab {
+    cursor: grabbing !important;
+    color: darkcyan !important;
+}
 
 .dropdown-content a {
     color: black;
@@ -101,9 +109,6 @@
     background-color: #f1f1f1;
     text-decoration: none;
 }
-
-
-
 /* .show class is now handled specifically in .dropdown-content.show for the animation, 
    but we keep this if used elsewhere, though typically we should avoid general utilities if we want specific animations.
    For this case, since JS toggles 'show', our specific selector .dropdown-content.show will take precedence 
@@ -126,6 +131,8 @@
     /* Map goes to top */
     /* Push map down - removed */
 }
+
+
 
 /* ... existing styles ... */
 body {

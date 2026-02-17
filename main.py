@@ -14,12 +14,15 @@ from contextlib import asynccontextmanager
 # --- NTRIP Caster Config (เหมือน ntripConnect.py) ---
 NTRIP_CAST = "161.246.18.204"
 NTRIP_PORT = 2101
-NTRIP_USER = "pokpong"
-NTRIP_PASSWORD = "pokpong2546"
-NTRIP_TIMEOUT = 5  # วินาที
+NTRIP_USER = "jirapoom"
+NTRIP_PASSWORD = "cssrg"
+NTRIP_TIMEOUT = 5 
 
-ALL_MOUNTPOINTS = ["CHMA", "CADT", "KMI6", "STFD", "RUTI", "CPN1", "NUO2", "ITC0", "HUEV", "KKU0"]
+ALL_MOUNTPOINTS = ["CHMA", "CADT", "KMI6", "STFD", "RUT1", "CPN1", "NUO2", "ITC0", "HUEV", "KKU0","NKRM", "NKNY", "CHMA", "DPT9", "LPBR", "CHAN", "CNBR", "SISK", "NKSW", "SOKA",
+                    "SRTN", "UDON", "SPBR", "UTTD", "PJRK"]
 
+DPT_MOUNTPOINTS = ["NKRM", "NKNY", "CHMA", "DPT9", "LPBR", "CHAN", "CNBR", "SISK", "NKSW", "SOKA",
+                    "SRTN", "UDON", "SPBR", "UTTD", "PJRK"]
 
 def check_ntrip_mountpoint(mountpoint: str) -> str:
     """
@@ -162,7 +165,7 @@ async def sync_images_from_nas():
         except Exception as e:
             print(f"Global Sync Error: {e}")
             
-        await asyncio.sleep(60) # Run every XX seconds
+        await asyncio.sleep(43200) # Run every XX seconds
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

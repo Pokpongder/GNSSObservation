@@ -8,11 +8,12 @@ from pyrtcm import RTCMReader
 # --- การตั้งค่าหลัก ---
 NTRIP_CAST = "161.246.18.204"
 PORT = 2101
-USER = "pokpong"
-PASSWORD = "pokpong2546"
+USER = "jirapoom"
+PASSWORD = "cssrg"
 
 # รายชื่อ Mountpoint ที่ต้องการเชื่อมต่อพร้อมกัน
-MOUNTPOINTS_LIST = ["CADT", "KMIT6", "KMI6"] 
+MOUNTPOINTS_LIST = ["NKRM", "NKNY", "CHMA", "DPT9", "LPBR", "CHAN", "CNBR", "SISK", "NKSW", "SOKA",
+                    "SRTN", "UDON", "SPBR", "UTTD", "PJRK"]
 
 def ecef2lla(x, y, z):
     # (ฟังก์ชันเดิม ไม่ต้องแก้)
