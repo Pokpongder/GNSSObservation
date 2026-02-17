@@ -75,14 +75,13 @@ function openSidebar(s) {
     checkStationStatus(s.name, s.code);
 }
 function checkStationStatus(stationName, stationCode) {
-    // 1. แก้ไข: ดึง Element แยกกัน 2 ตัว (ใน Sidebar และ Navbar)
+    // 1. ดึง Element สำหรับ dot ใน Sidebar และ Navbar
     var dotSidebar = document.getElementById('status-dot-' + stationCode);
     var dotNav = document.getElementById('status-dot-nav-' + stationCode);
 
-    // ถ้าไม่มีจุดสักอันเลย ก็ไม่ต้องทำต่อ
     if (!dotSidebar && !dotNav) return;
 
-    // ฟังก์ชันย่อยสำหรับเปลี่ยนสี (จะได้ไม่ต้องพิมพ์ซ้ำๆ)
+    // ฟังก์ชันย่อยสำหรับเปลี่ยนสี
     function updateStatus(colorClass) {
         [dotSidebar, dotNav].forEach(dot => {
             if (dot) {
@@ -92,45 +91,32 @@ function checkStationStatus(stationName, stationCode) {
         });
     }
 
-    // 2. ใช้ IP Address แทน localhost (ตามที่เราคุยกันไว้)
-    // เพื่อให้เปิดจากมือถือหรือเครื่องอื่นได้
-    var url = `http://localhost:8000/ionospherebystation/${stationName}/latest.jpg`;
+    // 2. เช็คสถานะจาก NTRIP endpoint แทนการดึงไฟล์จาก NAS
+    var url = `http://localhost:8000/ntrip-status/${stationName}`;
 
-    console.log(`Checking status for ${stationName} at ${url}...`);
+    console.log(`Checking NTRIP status for ${stationName}...`);
 
-    // 3. แนะนำให้ใช้ method: 'HEAD' เหมือนเดิม เพื่อความเร็ว (ไม่โหลดรูปจริง)
-    // แต่ถ้าอยากใช้ GET ก็ไม่ผิดครับ แค่เปลืองเน็ตกว่านิดหน่อย
-    fetch(url, { method: 'HEAD', cache: 'no-store' }) 
+    fetch(url, { cache: 'no-store' })
         .then(response => {
-            // กรณีหาไฟล์ไม่เจอ (404)
             if (!response.ok) {
-                console.warn(`${stationName}: Response not OK (${response.status})`);
+                console.warn(`${stationName}: API response not OK (${response.status})`);
                 updateStatus('status-red'); // 🔴
                 return;
             }
+            return response.json();
+        })
+        .then(data => {
+            if (!data) return;
 
-            // กรณีเจอไฟล์ (200 OK)
-            var lastModified = response.headers.get('Last-Modified');
-            
-            if (lastModified) {
-                var fileDate = new Date(lastModified);
-                var now = new Date();
-
-                // เปรียบเทียบแค่วัน/เดือน/ปี
-                if (fileDate.toDateString() === now.toDateString()) {
-                    console.log(`${stationName}: Status GREEN (Updated today)`);
-                    updateStatus('status-green'); // 🟢
-                } else {
-                    console.log(`${stationName}: Status ORANGE (Old data)`);
-                    updateStatus('status-orange'); // 🟠
-                }
-            } else {
-                // ถ้าไม่มี Header วันที่มาด้วย ให้เป็นเขียวไปก่อน (Safe fail)
+            if (data.status === 'green') {
+                console.log(`${stationName}: NTRIP Status GREEN (RTCM data available)`);
                 updateStatus('status-green'); // 🟢
+            } else {
+                console.log(`${stationName}: NTRIP Status RED (No RTCM data)`);
+                updateStatus('status-red'); // 🔴
             }
         })
         .catch(error => {
-            // กรณีเน็ตหลุด หรือ Server ดับ
             console.error(`${stationName}: Network Error:`, error);
             updateStatus('status-red'); // 🔴
         });
