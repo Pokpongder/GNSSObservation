@@ -574,3 +574,149 @@ body {
     color: #222;
     margin-right: 10px;
 }
+
+/* Satellite Monitor Styles */
+#sat-monitor-btn {
+    width: 100%;
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+#sat-monitor-btn:hover {
+    background-color: #0056b3;
+}
+
+#sat-monitor-container {
+    margin-top: 20px;
+    display: none;
+    /* Hidden by default */
+}
+
+.chart-container {
+    position: relative;
+    height: 200px;
+    width: 100%;
+}
+
+#sat-log-container {
+    margin-top: 15px;
+    background: #000;
+    color: #0f0;
+    font-family: monospace;
+    font-size: 12px;
+    height: 150px;
+    overflow-y: auto;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.log-entry {
+    margin-bottom: 2px;
+}
+
+/* Satellite Floating Window Styles */
+.sat-modal {
+    position: fixed;
+    top: 60px;
+    right: 20px;
+    /* Initial position */
+    width: 400px;
+    height: auto;
+    /* Allow auto height initially */
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    z-index: 2000;
+    /* Above everything */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    resize: both;
+    /* Allow resizing */
+    min-width: 320px;
+    min-height: 100px;
+    /* Reduced min-height to allow minimize */
+}
+
+.sat-modal-header {
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    cursor: move;
+    /* Drag cursor */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+}
+
+.sat-modal-title {
+    font-weight: bold;
+}
+
+.sat-modal-controls button {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: -130%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+.sat-modal-controls button:hover {
+    color: #ffd700;
+}
+
+.sat-modal-content {
+    padding: 10px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    height: 100%;
+    /* Fill remaining space */
+}
+
+/* Adjust Chart Container for Modal */
+.sat-modal .chart-container {
+    height: 200px;
+    flex-shrink: 0;
+    position: relative;
+    width: 100%;
+}
+
+/* Adjust Log Container for Modal */
+/* Adjust Log Container for Modal */
+.sat-modal .sat-log-container {
+    flex-grow: 1;
+    height: 150px;
+    /* Fixed height to enforce scrolling */
+    min-height: 100px;
+    /* Minimum height */
+    overflow-y: auto;
+    /* Enable scroll inside */
+    background-color: #000;
+    /* Black background like terminal */
+    color: #0f0;
+    /* Green text */
+    font-family: monospace;
+    font-size: 11px;
+    padding: 5px;
+    border-top: 2px solid #ccc;
+    /* Visual separation */
+    margin-top: 5px;
+}
