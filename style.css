@@ -36,18 +36,74 @@
 .nav-links button {
     color: white;
     text-decoration: none;
+    /* เอาขีดเส้นใต้ออกตั้งแต่ต้น */
     background: none;
     border: none;
     font-size: 16px;
-    margin-left: 20px;
     cursor: pointer;
     font-family: inherit;
-    text-shadow: none;
+
+    /* --- ส่วนที่เพิ่มใหม่ เพื่อให้เป็นทรง Tab --- */
+    padding: 8px 12px;
+    /* เพิ่มพื้นที่รอบตัวหนังสือ (บนล่าง 8px, ซ้ายขวา 12px) */
+    border-radius: 20px;
+    /* ลบเหลี่ยมมุมให้นุ่มๆ เหมือน Tab Chrome */
+    transition: background-color 0.2s ease;
+    /* ใส่ Effect ให้สีค่อยๆ เปลี่ยนแบบนุ่มนวล */
+    margin-left: 5px;
+    /* ลดระยะห่างเดิมลงหน่อย เพราะเรามี padding แล้ว */
 }
 
 .nav-links a:hover,
 .nav-links button:hover {
-    text-decoration: underline;
+    text-decoration: none;
+    background-color: rgba(255, 255, 255, 0.126);
+    /* สีขาวจางๆ 15% */
+}
+
+/* Filter Toggle (Segmented Pill) */
+.filter-toggle {
+    display: inline-flex;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    padding: 2px;
+    margin-left: 15px;
+    gap: 2px;
+}
+
+.filter-btn {
+    color: rgba(255, 255, 255, 0.7);
+    background: transparent;
+    border: none;
+    padding: 5px 14px;
+    border-radius: 18px;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.25s ease;
+    text-shadow: none;
+}
+
+.filter-btn:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.filter-btn.active {
+    color: #222;
+    background: white;
+    font-weight: 600;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Marker faded state (filtered-out stations) */
+.marker-faded {
+    opacity: 0.25 !important;
+    transition: opacity 0.3s ease;
+}
+
+.marker-status-dot {
+    transition: opacity 0.3s ease;
 }
 
 /* Dropdown Styles */
@@ -60,20 +116,20 @@
     display: block;
     /* Make block so we can animate properties */
     position: absolute;
-    top: 36px;
+    top: 43px;
     left: 0;
     right: auto;
-    background-color: #f9f9f9;
+    background-color: #ffffff;
     min-width: 180px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1003;
     text-shadow: none;
-
+    border-radius: 20px;
     /* Animation Styles */
     max-height: 0;
     opacity: 0;
-    visibility: hidden;
-    overflow: hidden;
+    visibility: auto;
+    overflow: auto;
     transition: max-height 0.4s ease-in-out, opacity 0.4s ease-in-out, visibility 0.4s;
 }
 
@@ -84,10 +140,12 @@
     visibility: visible;
     overflow-y: auto;
 }
+
 .leaflet-grab {
     cursor: grab !important;
     color: darkcyan !important;
 }
+
 .leaflet-dragging .leaflet-grab {
     cursor: grabbing !important;
     color: darkcyan !important;
@@ -109,6 +167,7 @@
     background-color: #f1f1f1;
     text-decoration: none;
 }
+
 /* .show class is now handled specifically in .dropdown-content.show for the animation, 
    but we keep this if used elsewhere, though typically we should avoid general utilities if we want specific animations.
    For this case, since JS toggles 'show', our specific selector .dropdown-content.show will take precedence 
@@ -472,4 +531,46 @@ body {
 .status-red {
     background-color: #dc3545;
     /* Red */
+}
+
+/* Station Info Styles */
+#station-info-container {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
+#station-info-container h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #333;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 5px;
+}
+
+.station-info-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.station-info-list li {
+    padding: 5px 0;
+    border-bottom: 1px solid #eaeaea;
+    font-size: 14px;
+    color: #555;
+    display: flex;
+    justify-content: space-between;
+}
+
+.station-info-list li:last-child {
+    border-bottom: none;
+}
+
+.station-info-list li strong {
+    color: #222;
+    margin-right: 10px;
 }

@@ -31,35 +31,47 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
 }).addTo(map);
 
 // 3. ข้อมูลสถานี
+// STATION_INFO moved to station_data.js
+
 var stations = [
     // --- Original Stations ---
-    { name: "CHMA", code: "CHMA", lat: 18.8000, lon: 98.9500 },
-    { name: "CADT", code: "CADT", lat: 11.6545, lon: 104.9116 },
-    { name: "KMI6", code: "KMI6", lat: 13.7278, lon: 100.7724 },
-    { name: "STFD", code: "STFD", lat: 13.7356, lon: 100.6611 },
-    { name: "RUT1", code: "RUT1", lat: 14.9889, lon: 102.1206 },
-    { name: "CPN1", code: "CPN1", lat: 10.7247, lon: 99.3744 },
-    { name: "NUO2", code: "NUO2", lat: 17.9383, lon: 102.6261 },
-    { name: "ITC0", code: "ITC0", lat: 11.5705, lon: 104.8994 },
-    { name: "HUEV", code: "HUEV", lat: 16.4155, lon: 107.5687 },
-    { name: "KKU0", code: "KKU0", lat: 16.4721, lon: 102.8260 },
+    { name: "CHMA", code: "KMITL", lat: 18.8000, lon: 98.9500 },
+    { name: "CADT", code: "KMITL", lat: 11.6545, lon: 104.9116 },
+    { name: "KMIT6", code: "KMITL", lat: 13.7278, lon: 100.7724 },
+    { name: "STFD", code: "KMITL", lat: 13.7356, lon: 100.6611 },
+    { name: "RUT1", code: "KMITL", lat: 14.9889, lon: 102.1206 },
+    { name: "CPN1", code: "KMITL", lat: 10.7247, lon: 99.3744 },
+    { name: "NUO2", code: "KMITL", lat: 18.0400, lon: 102.6347 },
+    { name: "ITC0", code: "KMITL", lat: 11.5705, lon: 104.8994 },
+    { name: "HUEV", code: "KMITL", lat: 16.4155, lon: 107.5687 },
+    { name: "KKU0", code: "KMITL", lat: 16.4721, lon: 102.8260 },
 
     // --- DPT Stations ---
-    { name: "NKSW", code: "NKSW", lat: 15.690637, lon: 100.114112 },
-    { name: "UTTD", code: "UTTD", lat: 17.630094, lon: 100.096343 },
-    { name: "CHAN", code: "CHAN", lat: 12.610310, lon: 102.102411 },
-    { name: "SPBR", code: "SPBR", lat: 14.518875, lon: 100.130580 },
-    { name: "DPT9", code: "DPT9", lat: 13.756782, lon: 100.573200 },
-    { name: "PJRK", code: "PJRK", lat: 11.811621, lon: 99.796348 },
-    { name: "SRTN", code: "SRTN", lat: 9.132225, lon: 99.331361 },
-    { name: "NKNY", code: "NKNY", lat: 14.212003, lon: 101.202211 },
-    { name: "SOKA", code: "SOKA", lat: 7.206694, lon: 100.596121 },
-    { name: "UDON", code: "UDON", lat: 17.412732, lon: 102.780704 },
-    { name: "CNBR", code: "CNBR", lat: 13.406019, lon: 100.997652 },
-    { name: "NKRM", code: "NKRM", lat: 14.992119, lon: 102.129470 },
-    { name: "LPBR", code: "LPBR", lat: 14.800907, lon: 100.651246 },
-    { name: "SISK", code: "SISK", lat: 15.116122, lon: 104.285676 }
+    { name: "NKSW", code: "DPT", lat: 15.690637, lon: 100.114112 },
+    { name: "UTTD", code: "DPT", lat: 17.630094, lon: 100.096343 },
+    { name: "CHAN", code: "DPT", lat: 12.610310, lon: 102.102411 },
+    { name: "SPBR", code: "DPT", lat: 14.518875, lon: 100.130580 },
+    { name: "DPT9", code: "DPT", lat: 13.756782, lon: 100.573200 },
+    { name: "PJRK", code: "DPT", lat: 11.811621, lon: 99.796348 },
+    { name: "SRTN", code: "DPT", lat: 9.132225, lon: 99.331361 },
+    { name: "NKNY", code: "DPT", lat: 14.212003, lon: 101.202211 },
+    { name: "SOKA", code: "DPT", lat: 7.206694, lon: 100.596121 },
+    { name: "UDON", code: "DPT", lat: 17.412732, lon: 102.780704 },
+    { name: "CNBR", code: "DPT", lat: 13.406019, lon: 100.997652 },
+    { name: "NKRM", code: "DPT", lat: 14.992119, lon: 102.129470 },
+    { name: "LPBR", code: "DPT", lat: 14.800907, lon: 100.651246 },
+    { name: "SISK", code: "DPT", lat: 15.116122, lon: 104.285676 }
 ];
+
+// รายชื่อ DPT mountpoints (ตรงกับ DPT_MOUNTPOINTS ใน main.py)
+var DPT_NAMES = ["NKRM", "NKNY", "DPT9", "LPBR", "CHAN", "CNBR", "SISK", "NKSW", "SOKA",
+    "SRTN", "UDON", "SPBR", "UTTD", "PJRK"];
+
+// กำหนด group ให้แต่ละสถานี (เช็คจาก name)
+stations.forEach(function (s) {
+    s.group = DPT_NAMES.includes(s.name) ? 'dpt' : 'kmitl';
+});
+
 // สร้าง divIcon วงกลมสี ตาม status (gray = loading, green = online, red = offline)
 function createStatusIcon(color) {
     return L.divIcon({
@@ -82,35 +94,83 @@ var iconGray = createStatusIcon('#aaa');
 var iconGreen = createStatusIcon('#2ecc71');
 var iconRed = createStatusIcon('#e74c3c');
 
+// --- Filter Logic ---
+var currentFilter = 'all';
+
+function applyFilter(group) {
+    currentFilter = group;
+    stations.forEach(function (s) {
+        if (!s.marker) return;
+        var el = s.marker.getElement();
+        if (!el) return;
+
+        if (group === 'all' || s.group === group) {
+            el.classList.remove('marker-faded');
+        } else {
+            el.classList.add('marker-faded');
+        }
+    });
+}
+
+// Filter toggle button handlers
+document.querySelectorAll('.filter-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+        // อัปเดต active class
+        document.querySelectorAll('.filter-btn').forEach(function (b) {
+            b.classList.remove('active');
+        });
+        btn.classList.add('active');
+
+        // ใช้ filter
+        applyFilter(btn.dataset.filter);
+    });
+});
+
 // 4. Sidebar Logic
 var sidebar = document.getElementById('sidebar');
 var closeSidebarBtn = document.getElementById('close-sidebar');
 var sidebarContent = document.getElementById('sidebar-content');
 
 function openSidebar(s) {
+    var info = STATION_INFO[s.name];
+    var infoHtml = '';
+
+    if (info) {
+        infoHtml = `
+            <ul class="station-info-list">
+                <li><strong>Organization:</strong> ${info.Organization || '-'}</li>
+                <li><strong>Country:</strong> ${info.Country || '-'}</li>
+                <li><strong>Latitude:</strong> ${info.Latitude || '-'}</li>
+                <li><strong>Longitude:</strong> ${info.Longitude || '-'}</li>
+                <li><strong>Navigation:</strong> ${info.Navigation || '-'}</li>
+                <li><strong>Format:</strong> ${info.Format || '-'}</li>
+                <li><strong>Receiver:</strong> ${info.Receiver || '-'}</li>
+            </ul>
+        `;
+    } else {
+        infoHtml = `<p style="color:red;">Info not found</p>`;
+    }
+
     sidebarContent.innerHTML = `
-        <h3>${s.name} (${s.code}) <span id="status-dot-${s.code}" class="status-dot"></span></h3>
+        <h3>${s.name} (${s.code}) <span id="status-dot-${s.name}" class="status-dot"></span></h3>
         <p class="station-coords">Lat: ${s.lat.toFixed(4)}, Lon: ${s.lon.toFixed(4)}</p>
-        <ul class="station-data-list">
-            <li>
-                <a href="#" onclick="toggleIonosphere(event)">1. Ionosphere &#9662;</a>
-                <div id="ionosphere-content" class="accordion-content">
-                    <br>
-                     <img src="http://localhost:8000/ionospherebystation/${s.name}/latest.jpg" alt="${s.name} View" class="station-image" title="Click for Full image" onclick="openLightbox(this.src)" onerror="this.parentElement.style.display='none'">
-                </div>
-            </li>
-        </ul>
+        
+        <div id="station-info-container">
+            <h4>Station Info</h4>
+            <div id="station-info-content">${infoHtml}</div>
+        </div>
     `;
     sidebar.classList.add('open');
-    checkStationStatus(s.name, s.code);
+    checkStationStatus(s.name);
 }
-function checkStationStatus(stationName, stationCode) {
+
+function checkStationStatus(stationName) {
     // 1. ดึง Element สำหรับ dot ใน Sidebar และ Navbar
-    var dotSidebar = document.getElementById('status-dot-' + stationCode);
-    var dotNav = document.getElementById('status-dot-nav-' + stationCode);
+    var dotSidebar = document.getElementById('status-dot-' + stationName);
+    var dotNav = document.getElementById('status-dot-nav-' + stationName);
 
     // หา station object เพื่ออัปเดต marker icon บนแผนที่
-    var station = stations.find(s => s.code === stationCode);
+    var station = stations.find(s => s.name === stationName);
 
     // ฟังก์ชันย่อยสำหรับเปลี่ยนสี dot + marker icon
     function updateStatus(colorClass, markerIcon) {
@@ -124,6 +184,10 @@ function checkStationStatus(stationName, stationCode) {
         if (station && station.marker) {
             station.marker.setIcon(markerIcon);
             station.marker.setZIndexOffset(colorClass === 'status-green' ? 1000 : 0);
+            var el = station.marker.getElement();
+            if (el && currentFilter !== 'all' && station.group !== currentFilter) {
+                el.classList.add('marker-faded');
+            }
         }
     }
 
@@ -158,17 +222,6 @@ function checkStationStatus(stationName, stationCode) {
         });
 }
 
-// Function to toggle Ionosphere section
-window.toggleIonosphere = function (e) {
-    e.preventDefault();
-    var content = document.getElementById('ionosphere-content');
-    if (content.style.maxHeight) {
-        content.style.maxHeight = null;
-    } else {
-        content.style.maxHeight = content.scrollHeight + "px";
-    }
-};
-
 function closeSidebar() {
     sidebar.classList.remove('open');
 }
@@ -197,7 +250,7 @@ stations.forEach(function (s) {
     var link = document.createElement('a');
     link.href = "#";
     // Add Dot Span with unique ID for Navbar
-    link.innerHTML = `${s.name} (${s.code}) <span id="status-dot-nav-${s.code}" class="status-dot"></span>`;
+    link.innerHTML = `${s.name} (${s.code}) <span id="status-dot-nav-${s.name}" class="status-dot"></span>`;
     link.onclick = function (e) {
         e.preventDefault(); // ป้องกันการดีดขึ้นบนสุดของหน้า
 
@@ -213,7 +266,7 @@ stations.forEach(function (s) {
 
 // Initialize Status Checks for ALL stations immediately
 stations.forEach(function (s) {
-    checkStationStatus(s.name, s.code);
+    checkStationStatus(s.name);
 });
 
 // Toggle การแสดงผล Dropdown

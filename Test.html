@@ -24,10 +24,15 @@
         </div>
         <div class="nav-links">
             <div class="dropdown">
-                <button id="stations-btn">Stations &#9662;</button>
+                <button id="stations-btn">Stations list &#9662;</button>
                 <div id="stations-list" class="dropdown-content">
                     <!-- Station list will be injected here by script.js -->
                 </div>
+            </div>
+            <div class="filter-toggle" id="filter-toggle">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="kmitl">KMITL</button>
+                <button class="filter-btn" data-filter="dpt">DPT</button>
             </div>
             <a href="about.html">About Us</a>
         </div>
@@ -93,6 +98,7 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
+    <script src="station_data.js"></script>
     <script src="script.js"></script>
 </body>
 
