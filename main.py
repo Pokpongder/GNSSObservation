@@ -102,11 +102,8 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(docs_url="/docs", redoc_url="/redoc", lifespan=lifespan)
 
-origins = ["http://localhost:8000",
-    "http://127.0.0.1:5500",
-    "http://localhost:5500",
-    "http://127.0.0.1:8000",
-    ]
+origins = ["*"] # Allow all origins for local network access
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,

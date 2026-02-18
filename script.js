@@ -205,7 +205,8 @@ function checkStationStatus(stationName) {
     }
 
     // 2. เช็คสถานะจาก NTRIP endpoint
-    var url = `http://localhost:8000/ntrip-status/${stationName}`;
+    var apiHost = window.location.hostname;
+    var url = `http://${apiHost}:8000/ntrip-status/${stationName}`;
 
     console.log(`Checking NTRIP status for ${stationName}...`);
 
@@ -380,7 +381,8 @@ class SatelliteMonitor {
     }
 
     connect() {
-        var wsUrl = `ws://localhost:8000/ws/sat-data/${this.stationName}`;
+        var apiHost = window.location.hostname;
+        var wsUrl = `ws://${apiHost}:8000/ws/sat-data/${this.stationName}`;
         this.log("Connecting...");
         this.socket = new WebSocket(wsUrl);
 
