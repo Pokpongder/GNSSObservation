@@ -16,7 +16,7 @@ import time
 import threading
 
 
-# --- NTRIP Caster Config (เหมือน ntripConnect.py) ---
+#NTRIP Caster Config 
 NTRIP_CAST = "161.246.18.204"
 NTRIP_PORT = 2101
 NTRIP_USER = "jirapoom"
@@ -25,11 +25,6 @@ NTRIP_TIMEOUT = 5
 
 ALL_MOUNTPOINTS = ["CHMA", "CADT", "KMIT6", "STFD", "RUT1", "CPN1", "NUO2", "ITC0", "HUEV", "KKU0","NKRM", "NKNY", "CHMA", "DPT9", "LPBR", "CHAN", "CNBR", "SISK", "NKSW", "SOKA",
                     "SRTN", "UDON", "SPBR", "UTTD", "PJRK","CM01"]
-
-DPT_MOUNTPOINTS = ["NKRM", "NKNY", "CHMA", "DPT9", "LPBR", "CHAN", "CNBR", "SISK", "NKSW", "SOKA",
-                    "SRTN", "UDON", "SPBR", "UTTD", "PJRK"]
-
-
 
 def check_ntrip_mountpoint(mountpoint: str) -> str:
     """
